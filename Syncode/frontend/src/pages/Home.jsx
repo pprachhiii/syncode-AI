@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
 const Home = () => {
   const securityFeatures = [
