@@ -39,7 +39,7 @@ const Home = () => {
               initial={{ opacity: 0, y: -50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="text-white text-4xl sm:text-5xl font-black max-w-4xl leading-tight"
+              className="text-[#11d462] text-4xl sm:text-5xl font-black max-w-4xl leading-tight"
             >
               Automated Medical Coding & Audit for India’s Insurance Workflows
             </motion.h1>
@@ -48,7 +48,7 @@ const Home = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-slate-300 text-lg mt-4"
+              className="text-white text-lg mt-4 text-#11d462"
             >
               Upload, automate, accelerate
             </motion.h2>
@@ -59,17 +59,30 @@ const Home = () => {
               transition={{ delay: 0.6 }}
               className="flex gap-4 mt-6 flex-wrap justify-center"
             >
+              <motion.button
+                whileHover={{ scale: 1.08, x: 3 }} // small push animation
+                transition={{ type: "spring", stiffness: 250, damping: 15 }}
+                className="
+                  border-primary 
+                  text-primary 
+                  px-6 py-3 
+                  rounded-md 
+                  flex items-center gap-2 
+                  transition-all duration-300 
+                  group
+                  hover:bg-#11d462
+                "
+              >
+                Get Started
+                <span className="transform transition-all duration-300 group-hover:translate-x-2">
+                  ➜
+                </span>
+              </motion.button>
+
               <Button
                 variant="default"
                 size="lg"
-                className="hover:scale-105 transition-transform w-full sm:w-auto"
-              >
-                Get Started
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="hover:scale-105 transition-transform w-full sm:w-auto"
+                className="hover:scale-110 transition-transform w-full sm:w-auto border-primary"
               >
                 Watch Demo
               </Button>
@@ -78,7 +91,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/*Comparsion Section*/}
+      {/* Comparison Section */}
       <section className="px-4 py-16 sm:px-6 lg:px-12">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-10 relative">
@@ -96,7 +109,7 @@ const Home = () => {
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center">
                   <span className="text-yellow-600 text-2xl">⚠️</span>
                 </div>
-                <h3 className="text-2xl font-semibold text-blue-500">
+                <h3 className="text-2xl font-semibold text-primary">
                   Manual Coding (Current Workflow)
                 </h3>
               </div>
@@ -138,12 +151,6 @@ const Home = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-3 flex gap-3">
-                    <Button variant="outline" className="flex-1">
-                      Log Issue
-                    </Button>
-                    <Button className="flex-1">Request Re-review</Button>
-                  </div>
                 </div>
               </div>
             </motion.div>
@@ -159,7 +166,7 @@ const Home = () => {
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center">
                   <span className="text-emerald-600 text-2xl">🧠</span>
                 </div>
-                <h3 className="text-2xl font-semibold text-blue-500">
+                <h3 className="text-2xl font-semibold text-primary">
                   SynCode AI - Extraction & Audit Support
                 </h3>
               </div>
@@ -185,22 +192,16 @@ const Home = () => {
                     </div>
 
                     <div className="mt-2">
-                      <div className="w-full bg-muted h-2 rounded overflow-hidden">
+                      <div className="w-full bg-[#1a1a1a] h-2 rounded overflow-hidden">
                         <div
-                          className="h-2 bg-blue-500"
-                          style={{ width: "92%" }}
+                          className="h-2"
+                          style={{ width: "92%", backgroundColor: "#11d462" }}
                         />
                       </div>
                       <div className="text-xs text-right text-muted-foreground mt-1">
                         92%
                       </div>
                     </div>
-                  </div>
-
-                  {/* Buttons BELOW bar */}
-                  <div className="flex gap-3 justify-start sm:justify-end mt-4">
-                    <Button variant="outline">Export ICD List (CSV)</Button>
-                    <Button>Open Evidence Viewer</Button>
                   </div>
                 </div>
 
@@ -252,13 +253,6 @@ const Home = () => {
                       review to ensure all tests/procedures captured
                     </li>
                   </ul>
-
-                  <div className="mt-3 flex gap-3">
-                    <Button variant="outline" className="flex-1">
-                      Mark All Reviewed
-                    </Button>
-                    <Button className="flex-1">Create Audit Tasks</Button>
-                  </div>
                 </div>
               </div>
             </motion.div>
@@ -267,18 +261,18 @@ const Home = () => {
       </section>
 
       {/* Security Cards */}
-      <section className="px-4 py-16 sm:px-6 lg:px-12 bg-background-light dark:bg-background-dark rounded-xl">
+      <section className="px-4 py-16 sm:px-6 lg:px-12 bg-background-dark rounded-xl">
         <div className="max-w-5xl mx-auto text-center">
           <motion.h2
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-[#007BFF] text-3xl font-bold"
+            className="text-primary text-3xl font-bold"
           >
             Your Data’s Security is Our Priority
           </motion.h2>
-          <p className="text-slate-600 dark:text-slate-400 text-lg mt-2 mb-12">
+          <p className="text-slate-400 text-lg mt-2 mb-12">
             Committed to highest standards of privacy.
           </p>
 
@@ -287,16 +281,14 @@ const Home = () => {
               <div key={idx} className="group perspective w-full h-48">
                 <div className="relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
                   {/* Front */}
-                  <div className="absolute inset-0 bg-white border border-border rounded-xl flex flex-col items-center justify-center p-6 shadow-lg [backface-visibility:hidden]">
+                  <div className="absolute inset-0 bg-background-dark border border-border rounded-xl flex flex-col items-center justify-center p-6 shadow-lg [backface-visibility:hidden]">
                     <div className="text-4xl mb-2">{feature.icon}</div>
-                    <h3 className="font-bold text-[#007BFF]">
-                      {feature.title}
-                    </h3>
+                    <h3 className="font-bold text-primary">{feature.title}</h3>
                   </div>
 
                   {/* Back */}
-                  <div className="absolute inset-0 bg-white border border-border rounded-xl p-4 flex items-center justify-center [transform:rotateY(180deg)] [backface-visibility:hidden]">
-                    <p className="text-[#007BFF] text-sm text-center">
+                  <div className="absolute inset-0 bg-background-dark border border-border rounded-xl p-4 flex items-center justify-center [transform:rotateY(180deg)] [backface-visibility:hidden]">
+                    <p className="text-primary text-sm text-center">
                       Detailed information about this feature goes here.
                     </p>
                   </div>
@@ -308,10 +300,10 @@ const Home = () => {
 
         <style>
           {`
-      .perspective {
-        perspective: 1000px;
-      }
-    `}
+            .perspective {
+              perspective: 1000px;
+            }
+          `}
         </style>
       </section>
 

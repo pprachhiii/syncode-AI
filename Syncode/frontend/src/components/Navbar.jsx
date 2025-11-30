@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   return (
-    <header className="sticky top-0 z-50 flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800/80 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm px-4 sm:px-8 md:px-16 lg:px-24 py-3">
-      <div className="flex items-center gap-4 text-slate-900 dark:text-white">
+    <header className="sticky top-0 z-50 flex items-center justify-between border-b border-slate-800 bg-background-dark/80 backdrop-blur-sm px-4 sm:px-8 md:px-16 lg:px-24 py-3">
+      <div className="flex items-center gap-4 text-slate-200">
         {/* Logo */}
-        <div className="w-8 h-8 text-primary text-blue-500">
+        <div className="w-8 h-8 text-primary">
           <svg
             fill="none"
             viewBox="0 0 48 48"
@@ -18,18 +18,20 @@ const Navbar = () => {
             />
           </svg>
         </div>
-
-        {/* Heading updated to Blue */}
-        <h2 className="text-lg font-bold tracking-tight text-[#007BFF]">
+        <h2 className="text-lg font-bold tracking-tight text-primary">
           SynCode AI
         </h2>
       </div>
 
       <div className="flex gap-2">
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" className="hover:scale-110">
           Login
         </Button>
-        <Button variant="default" size="sm">
+        <Button
+          variant="outline"
+          size="sm"
+          className="border-primary text-primary bg-primary hover:text-white hover:bg-#11d462 hover:scale-110"
+        >
           Sign Up
         </Button>
       </div>

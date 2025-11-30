@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
-
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
@@ -9,25 +8,17 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // Primary Healthcare Button (Blue)
-        default: "bg-[#007BFF] text-white hover:bg-[#0066CC]",
-
+        default: "bg-primary text-white hover:bg-primary/90",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-
-        // All Non-Primary Buttons : White + Blue Border + Blue Text
         outline:
-          "bg-white border border-[#007BFF] text-[#007BFF] hover:bg-[#007BFF] hover:text-white",
-
+          "bg-background-dark border border-primary text-primary hover:bg-primary hover:text-white",
         secondary:
-          "bg-white border border-[#007BFF] text-[#007BFF] hover:bg-[#007BFF] hover:text-white",
-
+          "bg-background-dark border border-primary text-primary hover:bg-primary hover:text-white",
         ghost:
-          "bg-white border border-[#007BFF] text-[#007BFF] hover:bg-[#007BFF] hover:text-white",
-
-        link: "text-[#007BFF] underline-offset-4 hover:underline bg-transparent border-none",
+          "bg-background-dark border border-primary text-primary hover:bg-primary hover:text-white",
+        link: "text-primary underline-offset-4 hover:underline bg-transparent border-none",
       },
-
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
