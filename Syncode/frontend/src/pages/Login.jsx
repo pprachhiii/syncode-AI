@@ -10,7 +10,7 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    // MOCK LOGIN CHECK (you can modify this as needed)
+    // MOCK LOGIN CHECK (modify this as needed)
     if (email.trim() === "" || password.trim() === "") {
       alert("Please enter email and password.");
       return;
@@ -19,7 +19,6 @@ const Login = () => {
     // Simulate login success
     alert("Login Successful (Mock Login)");
 
-    // Redirect to Upload Page
     navigate("/upload");
   };
 

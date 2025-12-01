@@ -10,7 +10,6 @@
 }
 
 html, body {
-  overflow-x: hidden;
   font-family: 'Public Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
