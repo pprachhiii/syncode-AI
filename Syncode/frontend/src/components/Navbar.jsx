@@ -1,7 +1,10 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
   return (
     <header className="sticky top-0 z-50 flex items-center justify-between border-b border-slate-800 bg-background-dark/80 backdrop-blur-sm px-4 sm:px-8 md:px-16 lg:px-24 py-3">
       <div className="flex items-center gap-4 text-slate-200">
@@ -24,13 +27,22 @@ const Navbar = () => {
       </div>
 
       <div className="flex gap-2">
-        <Button variant="outline" size="sm" className="hover:scale-110">
+        {/* LOGIN BUTTON */}
+        <Button
+          variant="outline"
+          size="sm"
+          className="hover:scale-110"
+          onClick={() => navigate("/login")}
+        >
           Login
         </Button>
+
+        {/* SIGNUP BUTTON */}
         <Button
           variant="outline"
           size="sm"
           className="border-primary text-primary bg-primary hover:text-white hover:bg-#11d462 hover:scale-110"
+          onClick={() => navigate("/signup")}
         >
           Sign Up
         </Button>

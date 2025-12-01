@@ -4,17 +4,10 @@ const Footer = () => {
   return (
     <footer className="relative bg-background-dark/80 backdrop-blur-sm border-t border-slate-800 h-32">
       <div className="absolute bottom-4 inset-x-0 flex flex-col md:flex-row items-center justify-between gap-6 px-4 sm:px-6">
-        <div className="flex flex-wrap justify-start gap-6">
-          {["Terms of Use", "Privacy Policy", "Support"].map((link) => (
-            <a
-              key={link}
-              href="#"
-              className="text-sm font-medium text-slate-400 hover:text-primary transition-all duration-300"
-            >
-              {link}
-            </a>
-          ))}
-        </div>
+        {/* (Left side is now empty but spacing preserved) */}
+        <div></div>
+
+        {/* Right side copyright */}
         <p className="text-sm text-slate-400 text-center md:text-right">
           &copy; 2025 SynCode AI
         </p>

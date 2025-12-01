@@ -3,8 +3,10 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
   const securityFeatures = [
     { title: "HIPAA-Compliant", icon: "🛡️" },
     { title: "256-bit AES Encryption", icon: "🔒" },
@@ -62,6 +64,7 @@ const Home = () => {
               <motion.button
                 whileHover={{ scale: 1.08, x: 3 }} // small push animation
                 transition={{ type: "spring", stiffness: 250, damping: 15 }}
+                onClick={() => navigate("/login")}
                 className="
                   border-primary 
                   text-primary 
