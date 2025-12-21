@@ -1,9 +1,12 @@
+import os
 import faiss
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
-INDEX_PATH = '../ml/embeddings/faiss_index.index'
-META_PATH = '../ml/embeddings/icd_meta.npy'
+# Use dynamic paths like in setup_vectordb.py
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+INDEX_PATH = os.path.join(SCRIPT_DIR, '..', 'ml', 'embeddings', 'faiss_index.index')
+META_PATH = os.path.join(SCRIPT_DIR, '..', 'ml', 'embeddings', 'icd_meta.npy')
 
 model = SentenceTransformer('all-MiniLM-L6-v2')
 index = faiss.read_index(INDEX_PATH)
@@ -22,8 +25,13 @@ def get_icd_code(disease_query, top_k=5):
             "distance": float(d)
         })
     return results
-##get_icd_code("cholera")
-#Expected Output
-##{"icd_code": "A00",
-  ##"description": "Cholera"
-##}
+
+# Test the function
+if __name__ == "__main__":
+    print("Testing ICD code retrieval...")
+    print(f"Total entries in index: {index.ntotal}")
+    print(f"Total metadata entries: {len(meta)}")
+    print("\n🔍 Searching for 'cholera':")
+    results = get_icd_code("cholera")
+    for result in results:
+        print(f"  {result['icd_code']}: {result['description']} (distance: {result['distance']:.4f})")
