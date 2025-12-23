@@ -17,6 +17,7 @@ const Upload = () => {
   const [transcriptFile, setTranscriptFile] = useState(null);
   const [pageCount, setPageCount] = useState(null);
   const [transcriptStatus, setTranscriptStatus] = useState("idle");
+  const [testInput, setTestInput] = useState("");
 
   const getPdfPageCount = async (file) => {
     try {
@@ -56,6 +57,10 @@ const Upload = () => {
     });
   };
 
+  const handleTestInputChange = (e) => {
+    setTestInput(e.target.value);
+  };
+
   const handleUploadStart = () => {
     if (!transcriptFile) {
       toast({
@@ -87,6 +92,7 @@ const Upload = () => {
           <span className="text-lg">›</span>
           <span>Upload</span>
         </nav>
+
         {/* Header */}
         <div className="flex items-start justify-between">
           <div>
@@ -98,6 +104,7 @@ const Upload = () => {
             </p>
           </div>
         </div>
+
         <div className="container max-w-6xl mx-auto p-6 space-y-6">
           <Tabs defaultValue="transcript" className="w-full">
             <TabsContent value="transcript" className="mt-4">
@@ -115,6 +122,20 @@ const Upload = () => {
                     : undefined
                 }
               />
+
+              {/* Test Input Field for teammate */}
+              <div className="mt-4">
+                <label className="block text-sm mb-2 text-foreground">
+                  Test Input
+                </label>
+                <input
+                  type="text"
+                  value={testInput}
+                  onChange={handleTestInputChange}
+                  placeholder="Enter test value..."
+                  className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
             </TabsContent>
           </Tabs>
 

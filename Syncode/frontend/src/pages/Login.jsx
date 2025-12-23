@@ -1,71 +1,135 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Mail, Lock } from "lucide-react";
+import { motion } from "framer-motion";
 
-const Login = () => {
+export default function LoginPage() {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-
-    // MOCK LOGIN CHECK (modify this as needed)
-    if (email.trim() === "" || password.trim() === "") {
-      alert("Please enter email and password.");
-      return;
+  // Redirect if already logged in by checking the cookie
+  useEffect(() => {
+    // Check if cookie "syncodeToken" exists
+    const hasToken = document.cookie
+      .split(";")
+      .some((cookie) => cookie.trim().startsWith("syncodeToken="));
+    if (hasToken) {
+      navigate("/upload"); // redirect to upload page
     }
+  }, [navigate]);
 
-    // Simulate login success
-    alert("Login Successful (Mock Login)");
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-    navigate("/upload");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const res = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+
+      navigate("/upload");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-background-light dark:bg-background-dark px-4">
-      <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-8 shadow">
-        <h2 className="text-2xl font-bold text-[#11d462] mb-6 text-center">
-          Login
-        </h2>
+    <div className="min-h-screen bg-background flex items-center justify-center p-6">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-md bg-card border border-border rounded-xl p-8"
+      >
+        {/* HEADER */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-semibold text-[#0e8f45]">Sign In</h1>
+          <p className="text-muted-foreground mt-2">Access your account</p>
+        </div>
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-3 rounded border border-slate-300 dark:border-slate-600 bg-transparent"
-          />
+        {/* FORM */}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-sm mb-2 text-foreground">
+              <Mail className="w-4 h-4 inline mr-2" />
+              Email
+            </label>
+            <input
+              type="email"
+              required
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+              className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              placeholder="you@company.com"
+            />
+          </div>
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-3 rounded border border-slate-300 dark:border-slate-600 bg-transparent"
-          />
+          <div>
+            <label className="block text-sm mb-2 text-foreground">
+              <Lock className="w-4 h-4 inline mr-2" />
+              Password
+            </label>
+            <input
+              type="password"
+              required
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+              className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              placeholder="••••••••"
+            />
+          </div>
+
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+
+          <div className="flex items-center justify-between">
+            <button
+              type="button"
+              className="text-sm text-primary hover:underline"
+            >
+              Forgot password?
+            </button>
+          </div>
 
           <button
             type="submit"
-            className="w-full bg-[#11d462] text-white py-3 rounded-md hover:bg-green-600 transition"
+            disabled={loading}
+            className="w-full py-3 text-primary-foreground rounded-lg bg-[#0e8f45] transition"
           >
-            Login
+            {loading ? "Signing in..." : "Sign In"}
           </button>
-        </form>
 
-        <p className="text-center mt-4 text-sm text-slate-600 dark:text-slate-400">
-          Don’t have an account?{" "}
-          <Link
-            to="/signup"
-            className="text-primary font-medium hover:underline"
-          >
-            Sign Up
-          </Link>
-        </p>
-      </div>
+          <p className="text-center text-muted-foreground">
+            Don’t have an account?{" "}
+            <Link to="/signup" className="text-[#0e8f45] hover:underline">
+              Sign up
+            </Link>
+          </p>
+        </form>
+      </motion.div>
     </div>
   );
-};
-
-export default Login;
+}

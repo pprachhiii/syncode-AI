@@ -79,8 +79,9 @@ const Navbar = () => {
           <Button
             size="sm"
             className="border-primary text-white bg-[#11d462] hover:scale-110 hover:bg-[#14e96d]"
+            onClick={() => navigate("/signup")}
           >
-            Request Demo
+            Get Started
           </Button>
         </div>
       </div>
