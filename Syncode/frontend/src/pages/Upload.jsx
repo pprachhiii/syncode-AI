@@ -122,22 +122,22 @@ const Upload = () => {
                     : undefined
                 }
               />
-
-              {/* Test Input Field for teammate */}
-              <div className="mt-4">
-                <label className="block text-sm mb-2 text-foreground">
-                  Test Input
-                </label>
-                <input
-                  type="text"
-                  value={testInput}
-                  onChange={handleTestInputChange}
-                  placeholder="Enter test value..."
-                  className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-              </div>
             </TabsContent>
           </Tabs>
+
+          {/* ---------- NORMAL INTERACTIVE INPUT FIELD ---------- */}
+          <div className="mt-4 relative z-10 pointer-events-auto">
+            <label className="block text-sm mb-2 text-foreground">
+              Test Input
+            </label>
+            <input
+              type="text"
+              value={testInput}
+              onChange={handleTestInputChange}
+              placeholder="Enter test value..."
+              className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary pointer-events-auto"
+            />
+          </div>
 
           {transcriptFile && (
             <Card className="p-4 bg-accent/50 border-accent mt-4 flex justify-end">
@@ -149,6 +149,7 @@ const Upload = () => {
               </Button>
             </Card>
           )}
+
           {/* Upload Guidelines Card */}
           {(transcriptStatus === "idle" || transcriptStatus === "error") && (
             <Card className="p-6 mt-10 bg-[#11d4620D] border border-[#11d46250] rounded-2xl">
@@ -198,6 +199,19 @@ const Upload = () => {
               </div>
             </Card>
           )}
+        </div>
+        {/* ---------- NORMAL INTERACTIVE INPUT FIELD ---------- */}
+        <div className="mt-4 relative z-20 pointer-events-auto">
+          <label className="block text-sm mb-2 text-foreground">
+            Test Input
+          </label>
+          <input
+            type="text"
+            value={testInput}
+            onChange={handleTestInputChange}
+            placeholder="Enter test value..."
+            className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          />
         </div>
       </div>
     </div>
