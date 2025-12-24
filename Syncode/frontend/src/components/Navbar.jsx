@@ -1,18 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { isAuthenticated } from "../lib/auth"; // your helper
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
+    // check login status on mount
+    isAuthenticated().then(setLoggedIn);
+
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("http://localhost:5000/api/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      setLoggedIn(false);
+      navigate("/");
+    } catch (err) {
+      console.error("Logout failed", err);
+    }
+  };
 
   return (
     <header
@@ -32,7 +48,6 @@ const Navbar = () => {
               />
             </svg>
           </div>
-
           <h2 className="text-lg font-bold tracking-tight text-white">
             SynCode AI
           </h2>
@@ -67,22 +82,35 @@ const Navbar = () => {
         </nav>
 
         <div className="flex gap-2">
-          <Button
-            variant="default"
-            size="sm"
-            className="hover:scale-110 hover:bg-yellow-500"
-            onClick={() => navigate("/login")}
-          >
-            Login
-          </Button>
+          {loggedIn ? (
+            <Button
+              variant="default"
+              size="sm"
+              className="bg-red-600 hover:scale-110 hover:bg-red-500"
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          ) : (
+            <>
+              <Button
+                variant="default"
+                size="sm"
+                className="hover:scale-110 hover:bg-yellow-500"
+                onClick={() => navigate("/login")}
+              >
+                Login
+              </Button>
 
-          <Button
-            size="sm"
-            className="border-primary text-white bg-[#11d462] hover:scale-110 hover:bg-[#14e96d]"
-            onClick={() => navigate("/signup")}
-          >
-            Get Started
-          </Button>
+              <Button
+                size="sm"
+                className="border-primary text-white bg-[#11d462] hover:scale-110 hover:bg-[#14e96d]"
+                onClick={() => navigate("/signup")}
+              >
+                Get Started
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </header>

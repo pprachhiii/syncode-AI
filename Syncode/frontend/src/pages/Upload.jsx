@@ -125,19 +125,16 @@ const Upload = () => {
             </TabsContent>
           </Tabs>
 
-          {/* ---------- NORMAL INTERACTIVE INPUT FIELD ---------- */}
-          <div className="mt-4 relative z-10 pointer-events-auto">
-            <label className="block text-sm mb-2 text-foreground">
-              Test Input
-            </label>
-            <input
-              type="text"
-              value={testInput}
-              onChange={handleTestInputChange}
-              placeholder="Enter test value..."
-              className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary pointer-events-auto"
-            />
-          </div>
+          {/* NORMAL INPUT FIELD */}
+          <label className="block text-sm mb-2 text-[#11d462]">
+            Test Input
+          </label>
+          <input
+            type="text"
+            value={testInput}
+            onChange={handleTestInputChange}
+            className="relative z-[9999] w-full px-4 py-3 bg-input border border-[#11d462] rounded-lg focus:border-[#11d462] focus:outline-none focus:ring-1 focus:ring-[#11d462]"
+          />
 
           {transcriptFile && (
             <Card className="p-4 bg-accent/50 border-accent mt-4 flex justify-end">
@@ -199,19 +196,6 @@ const Upload = () => {
               </div>
             </Card>
           )}
-        </div>
-        {/* ---------- NORMAL INTERACTIVE INPUT FIELD ---------- */}
-        <div className="mt-4 relative z-20 pointer-events-auto">
-          <label className="block text-sm mb-2 text-foreground">
-            Test Input
-          </label>
-          <input
-            type="text"
-            value={testInput}
-            onChange={handleTestInputChange}
-            placeholder="Enter test value..."
-            className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-          />
         </div>
       </div>
     </div>

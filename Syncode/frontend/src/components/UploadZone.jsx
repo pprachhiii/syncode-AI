@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import {
   Upload,
   FileText,
@@ -49,6 +49,7 @@ export const UploadZone = ({
   };
 
   const IconComponent = icon === "document" ? FileText : FileCode;
+  const hiddenFileInput = useRef(null);
 
   return (
     <Card
@@ -86,11 +87,14 @@ export const UploadZone = ({
             {!file ? (
               <div
                 className={cn(
-                  "flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 transition-colors",
+                  "relative flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 transition-colors",
                   isDragging
                     ? "border-primary bg-primary/5"
                     : "border-border bg-muted/30"
                 )}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
               >
                 <Upload className="h-10 w-10 text-[#11d462] mb-3" />
                 <p className="text-sm font-medium text-foreground mb-1">
@@ -103,17 +107,16 @@ export const UploadZone = ({
                   size="sm"
                   variant="outline"
                   className="mt-3"
-                  onClick={() => {
-                    document.getElementById("hidden-file-input")?.click();
-                  }}
+                  onClick={() => hiddenFileInput.current.click()}
                 >
                   Browse File
                 </Button>
                 <input
+                  ref={hiddenFileInput}
                   type="file"
                   accept={accept}
                   onChange={handleFileInput}
-                  className="absolute inset-0 cursor-pointer opacity-0"
+                  className="hidden" // <-- only hidden, not covering whole area
                 />
               </div>
             ) : (

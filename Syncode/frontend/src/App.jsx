@@ -3,13 +3,15 @@ import { Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/Login";
 import SignupPage from "./pages/Signup";
 import UploadPage from "./pages/Upload";
-
+import HomePage from "./pages/Home";
 import PublicRoute from "./routes/PublicRoute";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
   return (
     <Routes>
+      <Route path="/" element={<HomePage />} />
+
       <Route
         path="/login"
         element={
@@ -37,14 +39,7 @@ function App() {
         }
       />
 
-      <Route
-        path="*"
-        element={
-          <PublicRoute>
-            <LoginPage />
-          </PublicRoute>
-        }
-      />
+      <Route path="*" element={<div>Page Not Found</div>} />
     </Routes>
   );
 }

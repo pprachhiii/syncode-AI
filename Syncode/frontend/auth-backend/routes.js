@@ -1,5 +1,5 @@
 import express from "express";
-import { signup, login } from "./controller.js";
+import { signup, login, logout } from "./controller.js";
 import { verifyToken } from "./middleware.js";
 
 const router = express.Router();
@@ -7,6 +7,7 @@ const router = express.Router();
 // Auth routes
 router.post("/signup", signup);
 router.post("/login", login);
+router.post("/logout", logout);
 router.get("/me", verifyToken, (req, res) => {
   res.json({ user: req.user });
 });

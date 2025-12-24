@@ -110,7 +110,7 @@ export const login = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "Strict",
-      maxAge: 3600000, // 1 hour
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     const { password: _, ...userSafe } = user;
@@ -119,4 +119,14 @@ export const login = async (req, res) => {
     console.error(err);
     res.status(400).json({ error: err.message });
   }
+};
+
+export const logout = (req, res) => {
+  res.clearCookie("syncodeToken", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "Strict",
+  });
+
+  res.json({ message: "Logged out successfully" });
 };
