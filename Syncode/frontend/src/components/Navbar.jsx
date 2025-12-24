@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { isAuthenticated } from "../lib/auth"; // your helper
+import { isAuthenticated } from "../lib/auth";
 
 const Navbar = () => {
   const navigate = useNavigate();

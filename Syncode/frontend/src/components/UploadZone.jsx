@@ -116,7 +116,7 @@ export const UploadZone = ({
                   type="file"
                   accept={accept}
                   onChange={handleFileInput}
-                  className="hidden" // <-- only hidden, not covering whole area
+                  className="hidden"
                 />
               </div>
             ) : (
