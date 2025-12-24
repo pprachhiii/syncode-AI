@@ -86,7 +86,7 @@ const Upload = () => {
       <div className="container max-w-6xl mx-auto p-6 space-y-6">
         {/* Breadcrumb */}
         <nav className="mb-4 text-sm text-slate-500 dark:text-slate-400 flex items-center gap-2">
-          <a href="/page" className="hover:underline">
+          <a href="/" className="hover:underline">
             Home
           </a>
           <span className="text-lg">›</span>

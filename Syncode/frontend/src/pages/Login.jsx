@@ -1,21 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-
-  // Redirect if already logged in by checking the cookie
-  useEffect(() => {
-    // Check if cookie "syncodeToken" exists
-    const hasToken = document.cookie
-      .split(";")
-      .some((cookie) => cookie.trim().startsWith("syncodeToken="));
-    if (hasToken) {
-      navigate("/upload"); // redirect to upload page
-    }
-  }, [navigate]);
 
   const [formData, setFormData] = useState({
     email: "",

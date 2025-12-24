@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Building2 } from "lucide-react";
@@ -8,16 +8,6 @@ const fieldClass =
 
 export default function SignUpPage() {
   const navigate = useNavigate();
-
-  // Redirect if already logged in (check cookie)
-  useEffect(() => {
-    const hasToken = document.cookie
-      .split(";")
-      .some((cookie) => cookie.trim().startsWith("syncodeToken="));
-    if (hasToken) {
-      navigate("/upload"); // redirect logged-in users
-    }
-  }, [navigate]);
 
   const [formData, setFormData] = useState({
     companyName: "",
