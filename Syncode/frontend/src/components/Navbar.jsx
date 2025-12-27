@@ -3,13 +3,16 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { isAuthenticated } from "../lib/auth";
 
-const Navbar = () => {
+/**
+ * showNavLinks = true  -> Home page (shows Features, etc.)
+ * showNavLinks = false -> Other Page page (no nav links)
+ */
+const Navbar = ({ showNavLinks = true }) => {
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
-    // check login status on mount
     isAuthenticated().then(setLoggedIn);
 
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -19,7 +22,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await fetch("http://localhost:5000/api/logout", {
+      await fetch("http://localhost:5000/api/auth/logout", {
         method: "POST",
         credentials: "include",
       });
@@ -39,7 +42,11 @@ const Navbar = () => {
       }`}
     >
       <div className="flex items-center justify-between w-full">
-        <div className="flex items-center gap-2">
+        {/* LEFT: LOGO */}
+        <div
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() => navigate("/")}
+        >
           <div className="w-8 h-8 text-[#11d462]">
             <svg fill="none" viewBox="0 0 48 48">
               <path
@@ -53,38 +60,40 @@ const Navbar = () => {
           </h2>
         </div>
 
-        {/* NAVIGATION */}
-        <nav className="hidden md:flex gap-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
-          <a
-            href="#features"
-            className="text-white hover:text-[#11d462] transition"
-          >
-            Features
-          </a>
-          <a
-            href="#howitworks"
-            className="text-white hover:text-[#11d462] transition"
-          >
-            How It Works
-          </a>
-          <a
-            href="#comparison"
-            className="text-white hover:text-[#11d462] transition"
-          >
-            Comparison
-          </a>
-          <a
-            href="#security"
-            className="text-white hover:text-[#11d462] transition"
-          >
-            Security
-          </a>
-        </nav>
+        {/* CENTER: NAV LINKS (HOME PAGE ONLY) */}
+        {showNavLinks && (
+          <nav className="hidden md:flex gap-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
+            <a
+              href="#features"
+              className="text-white hover:text-[#11d462] transition"
+            >
+              Features
+            </a>
+            <a
+              href="#howitworks"
+              className="text-white hover:text-[#11d462] transition"
+            >
+              How It Works
+            </a>
+            <a
+              href="#comparison"
+              className="text-white hover:text-[#11d462] transition"
+            >
+              Comparison
+            </a>
+            <a
+              href="#security"
+              className="text-white hover:text-[#11d462] transition"
+            >
+              Security
+            </a>
+          </nav>
+        )}
 
+        {/* RIGHT: AUTH BUTTONS */}
         <div className="flex gap-2">
           {loggedIn ? (
             <Button
-              variant="default"
               size="sm"
               className="bg-red-600 hover:scale-110 hover:bg-red-500"
               onClick={handleLogout}
@@ -94,7 +103,6 @@ const Navbar = () => {
           ) : (
             <>
               <Button
-                variant="default"
                 size="sm"
                 className="hover:scale-110 hover:bg-yellow-500"
                 onClick={() => navigate("/login")}
@@ -104,7 +112,7 @@ const Navbar = () => {
 
               <Button
                 size="sm"
-                className="border-primary text-white bg-[#11d462] hover:scale-110 hover:bg-[#14e96d]"
+                className="bg-[#11d462] hover:scale-110 hover:bg-[#14e96d]"
                 onClick={() => navigate("/signup")}
               >
                 Get Started

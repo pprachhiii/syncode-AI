@@ -6,6 +6,7 @@ import UploadPage from "./pages/Upload";
 import HomePage from "./pages/Home";
 import PublicRoute from "./routes/PublicRoute";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import { DashboardPage } from "./pages/Dashboard";
 
 function App() {
   return (
@@ -35,6 +36,14 @@ function App() {
         element={
           <ProtectedRoute>
             <UploadPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
           </ProtectedRoute>
         }
       />

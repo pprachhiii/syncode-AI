@@ -20,7 +20,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/login", {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,7 +35,7 @@ export default function LoginPage() {
         throw new Error(data.message || "Login failed");
       }
 
-      navigate("/upload");
+      navigate("/dashboard");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -48,11 +48,11 @@ export default function LoginPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md bg-card border border-border rounded-xl p-8"
+        className="w-full max-w-md bg-card border border-[#11d462] rounded-xl p-8 shadow-[0_10px_30px_rgba(17,212,98,0.35)]"
       >
         {/* HEADER */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-semibold text-[#0e8f45]">Sign In</h1>
+          <h1 className="text-3xl font-semibold text-yellow-500">Sign In</h1>
           <p className="text-muted-foreground mt-2">Access your account</p>
         </div>
 
@@ -70,7 +70,7 @@ export default function LoginPage() {
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:border-[#11d462] focus:outline-none focus:ring-1 focus:ring-primary"
               placeholder="you@company.com"
             />
           </div>
@@ -87,17 +87,17 @@ export default function LoginPage() {
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
-              className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:border-[#11d462] focus:outline-none focus:ring-1 focus:ring-primary"
               placeholder="••••••••"
             />
           </div>
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
-          <div className="flex items-center justify-between">
+          <div className="flex justify-end">
             <button
               type="button"
-              className="text-sm text-primary hover:underline"
+              className="text-sm text-[#0e8f45] bg-transparent hover:underline hover:bg-transparent"
             >
               Forgot password?
             </button>
@@ -106,7 +106,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 text-primary-foreground rounded-lg bg-[#0e8f45] transition"
+            className="w-full py-3 text-primary-foreground rounded-lg bg-yellow-500 transition"
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>

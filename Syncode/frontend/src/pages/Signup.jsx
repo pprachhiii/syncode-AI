@@ -60,7 +60,7 @@ export default function SignUpPage() {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/signup", {
+      const res = await fetch("http://localhost:5000/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +75,7 @@ export default function SignUpPage() {
         throw new Error(data.message || "Signup failed");
       }
 
-      navigate("/upload");
+      navigate("/dashboard");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -87,15 +87,13 @@ export default function SignUpPage() {
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
       <motion.div
         layout
-        className={`w-full transition-all duration-500 ${
+        className={`w-full transition-all duration-500 shadow-[0_10px_30px_rgba(17,212,98,0.35)] ${
           isCompanyComplete ? "max-w-5xl" : "max-w-md"
-        } bg-card border border-border rounded-xl p-8`}
+        } bg-card border border-[#11d462] rounded-xl p-8`}
       >
         {/* HEADER */}
         <div className="text-center mb-6">
-          <h1 className="text-3xl font-semibold text-[#0e8f45]">
-            Create Company Account
-          </h1>
+          <h1 className="text-3xl font-semibold text-yellow-500">Sign Up</h1>
           <p className="text-muted-foreground mt-2">
             Register your company to get started
           </p>
@@ -133,9 +131,9 @@ export default function SignUpPage() {
                   onChange={handleChange}
                   className={fieldClass}
                 >
-                  <option className="bg-background text-black">India</option>
-                  <option className="bg-background text-black">USA</option>
-                  <option className="bg-background text-black">UK</option>
+                  <option className="bg-green-800 text-white">India</option>
+                  <option className="bg-green-800 text-white">USA</option>
+                  <option className="bg-green-800 text-white">UK</option>
                 </select>
 
                 <input
@@ -151,13 +149,13 @@ export default function SignUpPage() {
                 onChange={handleChange}
                 className={fieldClass}
               >
-                <option value="" className="bg-background text-black">
+                <option value="" className="bg-green-800 text-white">
                   Select Industry
                 </option>
-                <option value="medical" className="bg-background text-black">
+                <option value="medical" className="bg-green-800 text-white">
                   Medical Coding
                 </option>
-                <option value="audit" className="bg-background text-black">
+                <option value="audit" className="bg-green-800 text-white">
                   Audit
                 </option>
               </select>
@@ -231,12 +229,12 @@ export default function SignUpPage() {
           <button
             type="submit"
             disabled={!isCompanyComplete || !isAdminComplete || loading}
-            className="w-full mt-2 py-3 bg-[#0e8f45] text-primary-foreground rounded-lg disabled:opacity-50"
+            className="w-full mt-2 py-4 text-primary-foreground rounded-lg bg-yellow-500 transition"
           >
             {loading ? "Creating Account..." : "Create Account"}
           </button>
 
-          <p className="text-center text-muted-foreground mt-4">
+          <p className="text-center text-muted-foreground mt-2">
             Already have an account?{" "}
             <Link to="/login" className="text-[#0e8f45] hover:underline">
               Login

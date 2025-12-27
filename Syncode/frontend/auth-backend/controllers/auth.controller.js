@@ -1,4 +1,4 @@
-import { createUser, findUserByEmail } from "./service.js";
+import { createUser, findUserByEmail } from "../services/auth.service.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -71,7 +71,7 @@ export const signup = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "Strict",
-      maxAge: 3600000, // 1 hour
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 1 hour
     });
 
     // Respond without password

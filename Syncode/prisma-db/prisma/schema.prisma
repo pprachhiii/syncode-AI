@@ -41,7 +41,40 @@ model User {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  // Relations
   companyId         Int
   company           Company  @relation(fields: [companyId], references: [id])
+
+  transcripts       Transcript[]  
+}
+
+model Transcript {
+  id                Int      @id @default(autoincrement())
+  transcriptId      String   @unique
+
+  userId            Int
+  user              User     @relation(fields: [userId], references: [id])
+
+  inputType         InputType
+  filePaths         String[]
+
+  rawText           String?
+
+  caseId            String?
+  insuranceProvider String?
+  policyType        String?
+  service           String?
+
+  status            TranscriptStatus @default(PROCESSING)
+  createdAt         DateTime @default(now())
+}
+
+enum TranscriptStatus {
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum InputType {
+  FILE
+  TEXT
 }

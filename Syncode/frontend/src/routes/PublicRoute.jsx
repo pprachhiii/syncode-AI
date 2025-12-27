@@ -9,6 +9,6 @@ export default function PublicRoute({ children }) {
     isAuthenticated().then((ok) => setAllowed(!ok));
   }, []);
 
-  if (allowed === null) return null; // or loader
-  return allowed ? children : <Navigate to="/upload" replace />;
+  if (allowed === null) return null;
+  return allowed ? children : <Navigate to="/dashboard" replace />;
 }
