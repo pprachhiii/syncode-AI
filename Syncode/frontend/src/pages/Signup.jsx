@@ -60,14 +60,17 @@ export default function SignUpPage() {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(formData),
+        }
+      );
 
       const data = await res.json();
 
@@ -89,7 +92,7 @@ export default function SignUpPage() {
         layout
         className={`w-full transition-all duration-500 shadow-[0_10px_30px_rgba(17,212,98,0.35)] ${
           isCompanyComplete ? "max-w-5xl" : "max-w-md"
-        } bg-card border border-[#11d462] rounded-xl p-8`}
+        } bg-[#11d462]/5 border border-[#11d462] rounded-xl p-8`}
       >
         {/* HEADER */}
         <div className="text-center mb-6">

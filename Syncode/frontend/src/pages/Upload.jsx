@@ -1,17 +1,18 @@
 import { useState } from "react";
-import { UploadZone } from "@/components/UploadZone";
+import { UploadZone } from "@/components/upload/UploadZone";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import * as pdfjsLib from "pdfjs-dist";
 import { FileText, Folder, Paintbrush } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import { MetadataForm } from "@/components/Metadatform";
+import Navbar from "@/components/common/Navbar";
+import { MetadataForm } from "@/components/upload/Metadataform";
 import { cn } from "@/lib/utils";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
 const Upload = () => {
   const { toast } = useToast();
@@ -21,15 +22,59 @@ const Upload = () => {
   const [transcriptStatus, setTranscriptStatus] = useState("idle");
   const [transcriptText, setTranscriptText] = useState("");
 
+  const [metadata, setMetadata] = useState({
+    caseId: "",
+    insuranceProvider: "",
+    policyType: "",
+    service: "",
+  });
+
+  /* ---------------- Validation ---------------- */
+
+  const allowedServices = ["full-pipeline", "audit", "compliance"];
+
+  const isMetadataValid =
+    metadata.caseId.trim() !== "" &&
+    metadata.insuranceProvider.trim() !== "" &&
+    metadata.policyType.trim() !== "" &&
+    (metadata.service === "" || allowedServices.includes(metadata.service));
+
   const hasFiles = transcriptFiles.length > 0;
   const hasText = transcriptText.trim().length > 0;
-
   const canUpload = (hasFiles || hasText) && isMetadataValid;
 
-  const handleTranscriptUpload = async (files) => {
-    setTranscriptStatus("idle");
+  const validateFiles = (files) => {
+    const maxSize = 50 * 1024 * 1024; // 50MB
+    const allowedTypes = [
+      "application/pdf",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "text/plain",
+    ];
 
+    for (const file of files) {
+      if (!allowedTypes.includes(file.type)) {
+        toast({
+          title: "Invalid file type",
+          description: `${file.name} is not allowed`,
+          variant: "destructive",
+        });
+        return false;
+      }
+      if (file.size > maxSize) {
+        toast({
+          title: "File too large",
+          description: `${file.name} exceeds 50MB`,
+          variant: "destructive",
+        });
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const handleTranscriptUpload = (files) => {
     if (!Array.isArray(files) || files.length === 0) return;
+    if (!validateFiles(files)) return;
 
     setTranscriptFiles(files);
     setTranscriptStatus("success");
@@ -39,16 +84,6 @@ const Upload = () => {
       description: `${files.length} file(s) processed`,
     });
   };
-  const [metadata, setMetadata] = useState({
-    caseId: "",
-    insuranceProvider: "",
-    policyType: "",
-    service: "full-pipeline",
-  });
-  const isMetadataValid =
-    metadata.caseId.trim() !== "" &&
-    metadata.insuranceProvider.trim() !== "" &&
-    metadata.policyType.trim() !== "";
 
   const handleUploadStart = async () => {
     if (!hasFiles && !hasText) {
@@ -59,6 +94,7 @@ const Upload = () => {
       });
       return;
     }
+
     if (!isMetadataValid) {
       toast({
         title: "Missing metadata",
@@ -75,17 +111,23 @@ const Upload = () => {
         formData.append("files", file);
       });
 
-      formData.append("rawText", transcriptText);
+      if (hasText) {
+        formData.append("rawText", transcriptText);
+      }
+
       formData.append("caseId", metadata.caseId);
       formData.append("insuranceProvider", metadata.insuranceProvider);
       formData.append("policyType", metadata.policyType);
       formData.append("service", metadata.service);
 
-      const res = await fetch("http://localhost:5000/api/transcripts/upload", {
-        method: "POST",
-        body: formData,
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/transcripts/upload`,
+        {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        }
+      );
 
       const data = await res.json();
 
