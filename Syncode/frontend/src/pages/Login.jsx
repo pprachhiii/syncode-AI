@@ -20,14 +20,17 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+          credentials: "include",
+        }
+      );
 
       const data = await res.json();
 
@@ -48,7 +51,7 @@ export default function LoginPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md bg-card border border-[#11d462] rounded-xl p-8 shadow-[0_10px_30px_rgba(17,212,98,0.35)]"
+        className="w-full max-w-md bg-[#11d462]/5 border border-[#11d462] rounded-xl p-8 shadow-[0_10px_30px_rgba(17,212,98,0.35)]"
       >
         {/* HEADER */}
         <div className="text-center mb-8">
@@ -70,7 +73,7 @@ export default function LoginPage() {
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:border-[#11d462] focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full px-4 py-3 bg-input border border-border rounded-xl focus:border-[#11d462] focus:outline-none focus:ring-1 focus:ring-primary"
               placeholder="you@company.com"
             />
           </div>
@@ -87,7 +90,7 @@ export default function LoginPage() {
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
-              className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:border-[#11d462] focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full px-4 py-3 bg-input border border-border rounded-xl focus:border-[#11d462] focus:outline-none focus:ring-1 focus:ring-primary"
               placeholder="••••••••"
             />
           </div>
@@ -106,7 +109,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 text-primary-foreground rounded-lg bg-yellow-500 transition"
+            className="w-full py-3 text-primary-foreground rounded-xl bg-yellow-500 transition"
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>

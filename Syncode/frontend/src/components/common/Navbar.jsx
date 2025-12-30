@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { isAuthenticated } from "../lib/auth";
+import { isAuthenticated } from "../../lib/auth";
 
 /**
  * showNavLinks = true  -> Home page (shows Features, etc.)
@@ -22,7 +22,7 @@ const Navbar = ({ showNavLinks = true }) => {
 
   const handleLogout = async () => {
     try {
-      fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/logout`, {
+      await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/logout`, {
         method: "POST",
         credentials: "include",
       });
