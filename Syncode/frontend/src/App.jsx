@@ -4,14 +4,21 @@ import LoginPage from "./pages/Login";
 import SignupPage from "./pages/Signup";
 import UploadPage from "./pages/Upload";
 import HomePage from "./pages/Home";
+
 import PublicRoute from "./routes/PublicRoute";
 import ProtectedRoute from "./routes/ProtectedRoute";
+
 import { DashboardPage } from "./pages/Dashboard";
 import { ProcessingPage } from "./pages/Processing";
+
+import AuditOnly from "./pages/Results/audit-only";
+import ComplianceOnly from "./pages/Results/compliance-only";
+import FullPipeline from "./pages/Results/full-pipeline";
 
 function App() {
   return (
     <Routes>
+      {/* PUBLIC ROUTES */}
       <Route path="/" element={<HomePage />} />
 
       <Route
@@ -32,6 +39,7 @@ function App() {
         }
       />
 
+      {/* PROTECTED ROUTES */}
       <Route
         path="/upload"
         element={
@@ -40,8 +48,9 @@ function App() {
           </ProtectedRoute>
         }
       />
+
       <Route
-        path="/processing/:transcriptId"
+        path="/processing"
         element={
           <ProtectedRoute>
             <ProcessingPage />
@@ -58,6 +67,35 @@ function App() {
         }
       />
 
+      {/* RESULT ROUTES */}
+      <Route
+        path="/results/audit"
+        element={
+          <ProtectedRoute>
+            <AuditOnly />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/results/compliance"
+        element={
+          <ProtectedRoute>
+            <ComplianceOnly />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/results/full-pipeline"
+        element={
+          <ProtectedRoute>
+            <FullPipeline />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* FALLBACK */}
       <Route path="*" element={<div>Page Not Found</div>} />
     </Routes>
   );

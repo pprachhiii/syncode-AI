@@ -1,102 +1,114 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Brain, FileText, CheckCircle, Loader2 } from "lucide-react";
 import Navbar from "@/components/common/Navbar";
 
+const PIPELINES = {
+  audit: [
+    { name: "Virus Scan", description: "Checking uploaded files for threats" },
+    { name: "OCR Processing", description: "Extracting text from documents" },
+    {
+      name: "Medical Entity Extraction",
+      description: "Identifying diagnoses, procedures, and codes",
+    },
+    {
+      name: "Audit Verification",
+      description: "Validating codes against medical evidence",
+    },
+  ],
+
+  compliance: [
+    { name: "Virus Scan", description: "Checking uploaded files for threats" },
+    { name: "OCR Processing", description: "Extracting text from documents" },
+    {
+      name: "Policy Rule Validation",
+      description: "Applying insurer-specific rules",
+    },
+    {
+      name: "Regulatory Compliance Check",
+      description: "Ensuring IRDAI & policy compliance",
+    },
+  ],
+
+  "full-pipeline": [
+    { name: "Virus Scan", description: "Checking uploaded files for threats" },
+    { name: "OCR Processing", description: "Extracting text from documents" },
+    {
+      name: "Medical Entity Extraction",
+      description: "Identifying diagnoses and procedures",
+    },
+    {
+      name: "Audit Verification",
+      description: "Cross-checking codes with evidence",
+    },
+    {
+      name: "Policy Compliance Check",
+      description: "Final policy & regulatory validation",
+    },
+  ],
+};
+
+const SERVICE_LABELS = {
+  audit: "Audit Only",
+  compliance: "Policy & Regulatory Compliance",
+  "full-pipeline": "Full Pipeline (Extraction + Audit + Compliance)",
+};
+
 export function ProcessingPage() {
   const navigate = useNavigate();
-  const { transcriptId } = useParams();
+  const location = useLocation();
+
+  const serviceType = location.state?.serviceType;
 
   const [progress, setProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
-  const [steps, setSteps] = useState([]);
-  const [serviceType, setServiceType] = useState("full-pipeline");
-  // eslint-disable-next-line no-unused-vars
-  const [status, setStatus] = useState("PROCESSING");
-  const [uploadData, setUploadData] = useState({ metadata: {}, files: [] });
 
-  // Fetch transcript status from backend
+  // 🔒 Safety: redirect if user refreshes page
   useEffect(() => {
-    if (!transcriptId) return;
+    if (!serviceType) {
+      navigate("/upload");
+    }
+  }, [serviceType, navigate]);
 
-    const fetchStatus = async () => {
-      try {
-        const res = await fetch(
-          `${
-            import.meta.env.VITE_BACKEND_URL
-          }/api/transcripts/${transcriptId}/status`,
-          { credentials: "include" }
-        );
-        if (!res.ok) return;
+  const steps = PIPELINES[serviceType] || [];
 
-        const data = await res.json();
+  // ⏳ Simulate processing
+  useEffect(() => {
+    let progressInterval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) return 100;
+        return prev + 2;
+      });
+    }, 100);
 
-        setProgress(data.progress || 0);
-        setServiceType(data.service || "full-pipeline");
-        setSteps(data.steps || []);
-        setStatus(data.status || "PROCESSING");
+    let stepInterval = setInterval(() => {
+      setCurrentStep((prev) => {
+        if (prev < steps.length - 1) return prev + 1;
+        return prev;
+      });
+    }, 2000);
 
-        setUploadData({
-          metadata: data.metadata || {},
-          files: data.files || [],
-        });
+    let finishTimer = setTimeout(() => {
+      if (serviceType === "audit") navigate("/results/audit");
+      if (serviceType === "compliance") navigate("/results/compliance");
+      if (serviceType === "full-pipeline")
+        navigate("/results/full-pipeline");
+    }, 9000);
 
-        const stepIndex = data.steps?.findIndex(
-          (s) => s.name === data.currentStep
-        );
-        setCurrentStep(stepIndex === -1 ? 0 : stepIndex);
-
-        if (data.status === "COMPLETED") {
-          const resultRoutes = {
-            "full-pipeline": "/results/full-pipeline",
-            "audit-only": "/results/audit",
-            "compliance-only": "/results/compliance",
-          };
-          setTimeout(() => {
-            navigate(resultRoutes[data.service] || "/results/full-pipeline");
-          }, 1000);
-        }
-      } catch (err) {
-        console.error("Status fetch failed", err);
-      }
+    return () => {
+      clearInterval(progressInterval);
+      clearInterval(stepInterval);
+      clearTimeout(finishTimer);
     };
-
-    fetchStatus();
-    const interval = setInterval(fetchStatus, 2000);
-
-    return () => clearInterval(interval);
-  }, [transcriptId, navigate]);
-
-  const totalPages =
-    uploadData.files.reduce(
-      (acc, file) => acc + Math.floor(file.size / 50000),
-      0
-    ) || 245;
-
-  const serviceNames = {
-    "full-pipeline": "Full Pipeline (Code Extraction + Audit)",
-    "audit-only": "Audit Only",
-    "compliance-only": "Policy & Regulatory Compliance",
-  };
-
-  const handleGoToResults = () => {
-    // This button allows users to go to results manually
-    // will be removed later
-    const resultRoutes = {
-      "full-pipeline": "/results/full-pipeline",
-      "audit-only": "/results/audit",
-      "compliance-only": "/results/compliance",
-    };
-    navigate(resultRoutes[serviceType] || "/results/full-pipeline");
-  };
+  }, [serviceType, steps.length, navigate]);
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar showNavLinks={false} />
 
       <div className="max-w-4xl mx-auto px-6 py-16">
-        {/* Title */}
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -110,93 +122,82 @@ export function ProcessingPage() {
               className="absolute inset-0 border-4 border-transparent border-t-[#11d462] rounded-full"
             />
           </div>
+
           <h1 className="text-3xl mb-2 text-foreground">
             Processing Your Request
           </h1>
-          <p className="text-muted-foreground mb-2">
-            {serviceNames[serviceType]}
+          <p className="text-muted-foreground">
+            {SERVICE_LABELS[serviceType]}
           </p>
-          <p className="text-sm text-muted-foreground">
-            Case ID: {uploadData.metadata.caseId || "N/A"}
-          </p>
-
-          {/* Manual Skip Button */}
-          <button
-            onClick={handleGoToResults}
-            className="mt-4 px-4 py-2 rounded bg-[#11d462] text-white hover:bg-green-600 transition"
-          >
-            Go to Results
-          </button>
         </motion.div>
 
         {/* Progress Bar */}
         <div className="mb-12">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-foreground">Overall Progress</span>
-            <span className="text-[#11d462]">{Math.floor(progress)}%</span>
+          <div className="flex justify-between mb-2">
+            <span>Overall Progress</span>
+            <span className="text-[#11d462]">{progress}%</span>
           </div>
-          <div className="h-4 bg-secondary rounded-full overflow-hidden border border-green-900">
+          <div className="h-4 bg-secondary rounded-full overflow-hidden">
             <motion.div
               animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.3 }}
-              className="h-full bg-[#11d462] rounded-full"
+              className="h-full bg-[#11d462]"
             />
           </div>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-6 mb-12">
-          <div className="bg-[#11d462]/5 border border-border rounded-xl p-6 text-center">
-            <FileText className="w-8 h-8 text-[#11d462] mx-auto mb-2" />
-            <div className="text-2xl text-foreground mb-1">
-              {uploadData.files.length}
+          <div className="bg-[#11d462]/5 border rounded-xl p-6 text-center">
+            <FileText className="w-8 h-8 mx-auto mb-2 text-[#11d462]" />
+            <div className="text-2xl">{steps.length}</div>
+            <div className="text-sm text-muted-foreground">
+              Pipeline Steps
             </div>
-            <div className="text-sm text-muted-foreground">Files Uploaded</div>
           </div>
 
-          <div className="bg-[#11d462]/5 border border-border rounded-xl p-6 text-center">
-            <Loader2 className="w-8 h-8 text-[#11d462] mx-auto mb-2 animate-spin" />
-            <div className="text-2xl text-foreground mb-1">
-              {Math.floor((progress / 100) * totalPages)}
+          <div className="bg-[#11d462]/5 border rounded-xl p-6 text-center">
+            <Loader2 className="w-8 h-8 mx-auto mb-2 animate-spin text-[#11d462]" />
+            <div className="text-2xl">{currentStep + 1}</div>
+            <div className="text-sm text-muted-foreground">
+              Current Step
             </div>
-            <div className="text-sm text-muted-foreground">Pages Processed</div>
           </div>
 
-          <div className="bg-[#11d462]/5 border border-border rounded-xl p-6 text-center">
-            <Loader2 className="w-8 h-8 text-[#11d462] mx-auto mb-2 animate-spin" />
-            <div className="text-2xl text-foreground mb-1">
-              {Math.floor(progress)}
+          <div className="bg-[#11d462]/5 border rounded-xl p-6 text-center">
+            <CheckCircle className="w-8 h-8 mx-auto mb-2 text-[#11d462]" />
+            <div className="text-2xl">{progress}%</div>
+            <div className="text-sm text-muted-foreground">
+              Completed
             </div>
-            <div className="text-sm text-muted-foreground">Processing %</div>
           </div>
         </div>
 
-        {/* Steps */}
-        <div className="bg-[#11d462]/5 border border-border rounded-xl p-6">
-          <h3 className="text-foreground mb-6">Processing Pipeline</h3>
+        {/* Pipeline */}
+        <div className="bg-[#11d462]/5 border rounded-xl p-6">
+          <h3 className="mb-6">Processing Pipeline</h3>
           <div className="space-y-4">
             {steps.map((step, index) => {
-              const isCompleted = index < currentStep;
-              const isCurrent = index === currentStep;
+              const isDone = index < currentStep;
+              const isActive = index === currentStep;
 
               return (
                 <div
                   key={index}
-                  className={`flex items-center gap-4 p-4 rounded-xl ${
-                    isCurrent
-                      ? "bg-[#11d462]/10 border border-[#11d462]"
+                  className={`flex gap-4 p-4 rounded-xl ${
+                    isActive
+                      ? "border border-[#11d462] bg-[#11d462]/10"
                       : "bg-secondary"
                   }`}
                 >
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[#11d462] text-[#11d462]-foreground">
-                    {isCompleted ? (
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[#11d462]">
+                    {isDone ? (
                       <CheckCircle className="w-5 h-5" />
                     ) : (
                       <Loader2 className="w-5 h-5 animate-spin" />
                     )}
                   </div>
                   <div>
-                    <div className="text-foreground">{step.name}</div>
+                    <div>{step.name}</div>
                     <div className="text-sm text-muted-foreground">
                       {step.description}
                     </div>
